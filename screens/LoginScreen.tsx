@@ -20,6 +20,7 @@ import InputComponent from "../components/InputComponent";
 import { useAuth } from "../context/AuthContext";
 import { ILogin } from "../interfaces";
 import { loginValidationSchema } from "../utils/validations";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const initialValues: ILogin = {
   email: "",
@@ -30,6 +31,7 @@ const initialValues: ILogin = {
 
 export const LoginScreen = () => {
   // rome-ignore lint/suspicious/noExplicitAny: <explanation>
+  const [loading, setLoading] = React.useState(false);
   const navigation = useNavigation<any>();
   const { login } = useAuth();
 
@@ -46,6 +48,7 @@ export const LoginScreen = () => {
   const handleLogin = async (values: FormikValues) => {
     console.log("Iniciado");
     console.log(values);
+    setLoading(true);
     try {
       // Aquí realizamos la solicitud de inicio de sesión utilizando Axios
       const response = await axios.post(
@@ -62,16 +65,17 @@ export const LoginScreen = () => {
       // Navegamos a la pantalla de dashboard
       navigation.navigate("dashboard");
     } catch (error) {
+      setLoading(false)
       console.error(error);
     }
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1 }}
+    <KeyboardAwareScrollView
+      contentContainerStyle={{flex: 1}}
+      keyboardShouldPersistTaps='handled'
     >
-      <ExpoStatusBar style="dark" animated={true} />
+      <ExpoStatusBar style="dark" />
       <LinearGradient
         colors={[
           "#020515",
@@ -145,6 +149,7 @@ export const LoginScreen = () => {
                       backgroundColor="#0075ff"
                       onPress={handleSubmit}
                       fontFamily="Azeret Mono Bold"
+                      isLoading={loading}
                     />
                   </VStack>
                 )}
@@ -153,7 +158,7 @@ export const LoginScreen = () => {
           </VStack>
         </SafeAreaView>
       </LinearGradient>
-    </KeyboardAvoidingView>
+    </KeyboardAwareScrollView>
   );
 };
 

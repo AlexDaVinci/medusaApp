@@ -1,5 +1,5 @@
 import { FormControl, Select, WarningOutlineIcon } from "native-base";
-import { memo } from "react";
+import React, { memo } from "react";
 import {
   NativeSyntheticEvent,
   StyleSheet,
@@ -42,6 +42,8 @@ export const SelectComponent = memo(
       return (
         <Select
           selectedValue={value}
+          // @ts-ignore-next-line
+          optimized={false}
           mx="3"
           color={"white"}
           placeholder={placeholder || label}
@@ -72,7 +74,7 @@ export const SelectComponent = memo(
         style={styles.formControl}
       >
         {label && (
-          <FormControl.Label ml={3} _text={{ color: "white" }}>
+          <FormControl.Label ml={1} _text={{ color: "white" }}>
             <Text style={{ fontFamily, ...styles.label }}>{label}</Text>
           </FormControl.Label>
         )}
